@@ -10,6 +10,7 @@ type NavItem = {
   label: string;
   icon: string;
 };
+const isDevelopment = process.env.NODE_ENV !== "production";
 
 const topNav: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: "dashboard" },
@@ -28,7 +29,7 @@ const sidebarNav: NavItem[] = [
   { href: "/reminders", label: "Reminders", icon: "reminders" },
   { href: "/settings/data-export", label: "Export", icon: "export" },
   { href: "/onboarding", label: "Onboarding", icon: "onboarding" },
-  { href: "/health/supabase", label: "Connection", icon: "connection" },
+  ...(isDevelopment ? [{ href: "/health/supabase", label: "Connection", icon: "connection" }] : []),
 ];
 
 const mobileNav: NavItem[] = [
