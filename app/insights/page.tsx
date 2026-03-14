@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { SimpleBarChart } from "@/components/ui/simple-bar-chart";
 import { SimpleLineChart } from "@/components/ui/simple-line-chart";
+import { generateAiInsightsSummary } from "@/lib/insights/ai-summary";
 import { cycleStats, symptomsByPhase, symptomsByType, buildInsightCards, type SymptomRow } from "@/lib/insights/analytics";
 import { pregnancyStateFromLmp } from "@/lib/pregnancy/utils";
 import { createClient } from "@/utils/supabase/server";
@@ -76,6 +77,17 @@ export default async function InsightsPage() {
     pregnancyWeek,
   });
 
+  const aiSummary = await generateAiInsightsSummary({
+    cycleLengths: stats.lengths,
+    cycleAverage: stats.avg,
+    cycleStdDev: stats.sd,
+    topSymptomType,
+    topSymptomCount: typeEntries[0]?.[1] ?? 0,
+    totalSymptoms: symptomRows.length,
+    phaseCounts: phaseMap,
+    pregnancyWeek,
+  });
+
   return (
     <main className="bc-page">
       <section className="space-y-5">
@@ -84,6 +96,21 @@ export default async function InsightsPage() {
           <h1 className="bc-heading">Advanced health pattern insights</h1>
           <p className="text-sm bc-muted">
             These are supportive, non-diagnostic trends from your logs. They are not medical conclusions.
+          </p>
+        </article>
+
+        <article className="bc-card space-y-3 p-6">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-lg font-semibold">AI analytics summary</h2>
+            <span className="bc-pill">{aiSummary.source === "openai" ? "AI-generated" : "Rule-based fallback"}</span>
+          </div>
+          <ul className="list-disc space-y-1 pl-5 text-sm text-[var(--color-neutral-700)]">
+            {aiSummary.points.map((point, idx) => (
+              <li key={`${idx}-${point.slice(0, 20)}`}>{point}</li>
+            ))}
+          </ul>
+          <p className="text-xs bc-muted">
+            This summary is supportive and non-diagnostic. For urgent or persistent symptoms, contact your healthcare provider.
           </p>
         </article>
 
