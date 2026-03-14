@@ -56,7 +56,7 @@ export default async function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div className="min-h-screen pb-20 lg:pb-0">
           <header className="border-b border-[var(--color-border)] bg-white/85 backdrop-blur-md">
-            <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3 md:px-6">
+            <div className="mx-auto grid w-full max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-3 md:px-6">
               <Link href="/" className="flex items-center gap-2">
                 <Image
                   src="/brand/bloomcycle-mark.svg"
@@ -69,10 +69,10 @@ export default async function RootLayout({
                 <span className="text-lg font-semibold tracking-tight">BloomCycle</span>
               </Link>
 
-              {user ? <TopQuickNav /> : null}
+              <div className="flex justify-center">{user ? <TopQuickNav /> : null}</div>
 
               {user ? (
-                <div className="ml-auto flex items-center gap-2">
+                <div className="flex items-center gap-2">
                   <div className="lg:hidden">
                     <MobileMenuSheet />
                   </div>
@@ -90,7 +90,7 @@ export default async function RootLayout({
                   </form>
                 </div>
               ) : (
-                <div className="ml-auto flex items-center gap-2">
+                <div className="flex items-center gap-2">
                   <Link href="/login" className="bc-btn-secondary text-sm">
                     Login
                   </Link>
