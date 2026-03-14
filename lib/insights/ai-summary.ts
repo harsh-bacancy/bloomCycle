@@ -49,7 +49,7 @@ function parseBullets(text: string) {
 export async function generateAiInsightsSummary(input: AiInsightInput) {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    return { text: buildFallbackSummary(input), source: "fallback" as const };
+    return { points: buildFallbackSummary(input), source: "fallback" as const };
   }
 
   const systemPrompt =
