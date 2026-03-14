@@ -305,7 +305,27 @@ App group:
 
 ---
 
-## 12. Rules for the Agent
+## 12. Landing Page Visual Asset Rules
+
+Agent must keep landing visuals consistent and production-safe:
+
+- Prefer local assets in `public/illustrations/*` for hero and feature art.
+- Keep one visual family:
+  - Rounded corners, soft gradients, minimal line detail, BloomCycle color tokens.
+- Each key section should have supporting art:
+  - Hero: one wide banner/illustration.
+  - Feature path cards: one illustration each.
+- Always provide meaningful `alt` text for accessibility.
+- Track and maintain asset rights in `ASSET_LICENSES.md`.
+
+If external assets are introduced later:
+
+- Use only assets with clear commercial usage rights.
+- Record source URL, creator, license URL, and attribution requirements in `ASSET_LICENSES.md`.
+
+---
+
+## 13. Rules for the Agent
 
 When generating UI code:
 

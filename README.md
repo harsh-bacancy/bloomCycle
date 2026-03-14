@@ -129,3 +129,22 @@ Auth callback routes used by Supabase email links:
 UI implementation follows:
 
 - `UI_STRUCTURE.md`
+
+## Playwright e2e
+
+Run module smoke tests:
+
+```bash
+npm run test:e2e
+```
+
+Optional logged-in module checks require credentials:
+
+```bash
+E2E_EMAIL=your-user@example.com E2E_PASSWORD=your-password npm run test:e2e
+```
+
+Notes:
+
+- `tests/e2e/modules.spec.ts`: public and protected-route smoke checks (logged-out behavior).
+- `tests/e2e/logged-in-modules.spec.ts`: logged-in module route checks (auto-skips if `E2E_EMAIL`/`E2E_PASSWORD` are missing).
