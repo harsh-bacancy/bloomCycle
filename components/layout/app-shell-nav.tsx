@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createPortal } from "react-dom";
 
 type NavItem = {
@@ -23,7 +23,6 @@ const sidebarNav: NavItem[] = [
   { href: "/cycle/symptoms", label: "Symptoms", icon: "symptoms" },
   { href: "/pregnancy", label: "Pregnancy", icon: "pregnancy" },
   { href: "/learn", label: "Learn", icon: "learn" },
-  { href: "/community", label: "Community", icon: "community" },
   { href: "/appointments", label: "Appointments", icon: "appointments" },
   { href: "/medications", label: "Medications", icon: "medications" },
   { href: "/reminders", label: "Reminders", icon: "reminders" },
@@ -42,6 +41,10 @@ const mobileNav: NavItem[] = [
 function isActive(pathname: string, href: string) {
   if (pathname === href) return true;
   return pathname.startsWith(`${href}/`);
+}
+
+function hideSidebarForRoute(pathname: string) {
+  return pathname.startsWith("/insights") || pathname.startsWith("/community");
 }
 
 function NavIcon({ name, active }: { name: string; active: boolean }) {
@@ -161,6 +164,7 @@ export function TopQuickNav() {
 
 export function SidebarNav() {
   const pathname = usePathname();
+  if (hideSidebarForRoute(pathname)) return null;
 
   return (
     <aside className="hidden w-64 shrink-0 lg:block">
@@ -196,6 +200,7 @@ export function SidebarNav() {
 
 export function MobileBottomNav() {
   const pathname = usePathname();
+  if (hideSidebarForRoute(pathname)) return null;
 
   return (
     <nav className="fixed inset-x-0 bottom-3 z-40 px-3 lg:hidden">
@@ -226,11 +231,9 @@ export function MobileBottomNav() {
 export function MobileMenuSheet() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const hideSidebar = hideSidebarForRoute(pathname);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  if (hideSidebar) return null;
 
   return (
     <>
@@ -245,7 +248,7 @@ export function MobileMenuSheet() {
         </svg>
       </button>
 
-      {mounted && open
+      {open && typeof document !== "undefined"
         ? createPortal(
             <div className="fixed inset-0 z-50 lg:hidden">
               <button
