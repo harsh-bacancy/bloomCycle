@@ -149,10 +149,7 @@ export default async function Home() {
               <p className="text-xs font-semibold text-[#8a251f]">Every stage supported</p>
               <p className="mt-1 text-sm bc-muted">Cycle tracking, TTC support, pregnancy tools, and educational content.</p>
             </article>
-          </div>
-          <Link href="/health/supabase" className="text-sm font-medium text-[var(--color-primary-700)] underline">
-            Check system connection
-          </Link>
+          </div>        
         </aside>
       </section>
 
