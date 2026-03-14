@@ -5,6 +5,35 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/server";
 
+function trimTrailingSlash(url: string) {
+  return url.replace(/\/+$/, "");
+}
+
+async function resolveAppBaseUrl() {
+  const h = await headers();
+  const envSiteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    process.env.SITE_URL ??
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
+
+  if (envSiteUrl) {
+    return trimTrailingSlash(envSiteUrl);
+  }
+
+  const forwardedProto = h.get("x-forwarded-proto");
+  const forwardedHost = h.get("x-forwarded-host");
+  if (forwardedProto && forwardedHost) {
+    return `${forwardedProto}://${forwardedHost}`;
+  }
+
+  const origin = h.get("origin");
+  if (origin) {
+    return trimTrailingSlash(origin);
+  }
+
+  return "http://localhost:3000";
+}
+
 function getString(formData: FormData, key: string) {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";
@@ -29,13 +58,13 @@ export async function signUp(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const origin = (await headers()).get("origin") ?? "";
+  const baseUrl = await resolveAppBaseUrl();
 
   const { error, data } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      emailRedirectTo: origin ? `${origin}/auth/callback?next=/dashboard` : undefined,
+      emailRedirectTo: `${baseUrl}/auth/callback?next=/dashboard`,
     },
   });
 
@@ -76,10 +105,10 @@ export async function requestPasswordReset(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const origin = (await headers()).get("origin") ?? "";
+  const baseUrl = await resolveAppBaseUrl();
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: origin ? `${origin}/auth/callback?next=/update-password` : undefined,
+    redirectTo: `${baseUrl}/auth/callback?next=/update-password`,
   });
 
   if (error) {

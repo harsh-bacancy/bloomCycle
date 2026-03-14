@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { signUp } from "@/app/auth/actions";
 import { createClient } from "@/utils/supabase/server";
 
 type SignupPageProps = {
@@ -35,7 +34,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
           {params.message ? <p className="bc-alert-info">{params.message}</p> : null}
           {params.error ? <p className="bc-alert-warn">{params.error}</p> : null}
 
-          <form action={signUp} className="space-y-3">
+          <form action="/auth/signup" method="post" className="space-y-3">
             <label className="bc-label">
               <span>Email</span>
               <input name="email" type="email" required className="bc-input" />
