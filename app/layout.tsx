@@ -45,6 +45,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const isDevelopment = process.env.NODE_ENV !== "production";
   const supabase = await createClient();
   const {
     data: { user },
@@ -116,9 +117,11 @@ export default async function RootLayout({
           <footer className="border-t border-[var(--color-border)] bg-white/80">
             <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 text-xs text-[var(--color-neutral-500)] md:px-6">
               <p>BloomCycle supports health awareness and does not provide medical diagnosis.</p>
-              <Link href="/health/supabase" className="underline">
-                System status
-              </Link>
+              {isDevelopment ? (
+                <Link href="/health/supabase" className="underline">
+                  System status
+                </Link>
+              ) : null}
             </div>
           </footer>
         </div>
